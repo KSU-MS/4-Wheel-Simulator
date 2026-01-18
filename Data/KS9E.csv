@@ -1,0 +1,26 @@
+param,value,
+m_total_kg,303,vehicle mass (w driver)
+cg_z_m,0.25,CG Heigh (m)
+wb_m,1.6,Wheelbase
+tw_f_m,1.2,F Track
+tw_r_m,1.2,R Track
+swd_frac,0.5,Static Weight (Rear)
+r_tire_m,0.22,Tire Radius
+rho_air_kgpm3,1.15,Air Density
+af_m2,1.3,F Area
+ClA,1.68,DF Coefficient
+CdA,1.18,Drag Coefficient
+cp_frac,0.55,Aero CoP Rear
+mu_long_0,1.8,Fric Tire Long
+mu_lat_0,1.7,Fric Tire Lat
+fz_ref_N,784.8,Fz Per Tire
+load_sens_exp,0.06,Load Sensitivity
+pack_voltage_v,588,Pack Voltage
+r_internal_ohm,0.023,Acc Internal Resis
+dt_s,0.001,Time Step
+iter_max,15,Max Iteration - Load Transfer
+iter_tol_ax,0.0001,Long Accel Convergence Tolerance (M/S^2)
+enable_regen,FALSE,Regen
+power_limit_W,80000,Power Limit (W)
+muk_long_0,1.5,Kinetic Fric Tire Lat
+Cor_stif,472,Cornering Stiffness (N/deg)
