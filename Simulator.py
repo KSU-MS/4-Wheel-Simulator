@@ -37,29 +37,6 @@ def AeroForce(veh, v):
     F_df = 0.5 * veh.rho_air_kgpm3 * v2 * veh.ClA
     F_drag = 0.5 * veh.rho_air_kgpm3 * v2 * veh.CdA
     return F_df, F_drag
-def TireSlipAngle(veh,R,v,Fz,D_arr,C_arr):
-    pass
-
-def PacejkaFy_Max(veh, Fz, R, v):
-    fz_norm = veh.fz_ref_N **(veh.load_sens_exp) * Fz**(1 - veh.load_sens_exp)
-    D = veh.mu_lat_0 * fz_norm
-    apeak = D/(veh.Cor_stif)
-    #apeak = 10*np.pi/180
-    C = []
-    for val in D:
-        def func(C):
-            return np.tan(np.pi/(2*C))*(C*val/(veh.Cor_stif))-apeak
-        try:
-            C.append(root_scalar(func, bracket=[1+EPS, 3.0], method='brentq').root)
-        except:
-            C.append(1.3)
-    #C = np.array(C)
-    C = np.repeat(1.4,4)
-    B = veh.Cor_stif/(C*D)
-    E = (B*apeak - np.tan(np.pi/(2*C)))/(B*apeak-np.arctan(B*apeak))
-    slipAngles = np.array(TireSlipAngle(veh,R,v,Fz,D,C))
-    return D*np.sin(C*np.arctan(B*slipAngles - E*(B*slipAngles - np.arctan(B*slipAngles))))
-    
 
 def v_max (veh,R, Fy_max=0):
     def func(v):

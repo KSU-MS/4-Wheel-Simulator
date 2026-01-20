@@ -12,3 +12,4 @@ tran_eff,0.92,drive efficiency
 rpm_max,6500,max motor speed (rpm)
 i_max_a,150,max motor current
 pack_eff,.9025,inverter + acc effciency
+I_motor_s,0.01569,motor rotor inertia (kgm^2)
