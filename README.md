@@ -2,3 +2,4 @@
 Within 10% accuracy to full run
 With Straight line into corner braking accuracy
 Pacejka Model is being introduced
+Use Simulator.py until this line is removed
