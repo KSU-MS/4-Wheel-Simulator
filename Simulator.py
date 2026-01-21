@@ -93,7 +93,7 @@ def MotorForceLimitsSingle(motor, v, r_tire, Fx_cap_rear, P_pack_limit):
     I_phase = T_used / motor.kt_nm_per_a
     P_mech = T_rear_total * omega_wheel
     V_back = motor.ke_v_per_rad * omega
-    P_elec = P_mech / motor.tran_eff + (I_phase**2 * motor.r_phase_ohm) + (V_back * motor.i0_a)
+    P_elec = P_mech + (I_phase**2 * motor.r_phase_ohm) + (V_back * motor.i0_a)
 
     return T_rear_total/r_tire, P_elec, Limiter, I_phase, omega*30/np.pi
 
@@ -147,7 +147,7 @@ def SimulateSegment(state, seg, veh, motor):
                     Limiter = "Braking"
                     P_elec_motor = 0.0
                     Fx_total = ax * veh.m_total_kg + Fdrag
-                    omega = v / veh.r_tire_m * motor.n_gear
+                    omega = v / veh.r_tire_m * motor.n_gear*30/np.pi
                 else:
                     Fx_total, P_elec_motor, Limiter, _, omega = MotorForceLimitsSingle(motor, v, veh.r_tire_m, Fx_cap_tire[2:4], veh.power_limit_W)
                     ax = (Fx_total - Fdrag) / veh.m_total_kg
@@ -172,7 +172,7 @@ def SimulateSegment(state, seg, veh, motor):
         Vpack = np.maximum(veh.pack_voltage_v, 12.0)
         I_pack = P_elec_motor / Vpack
         P_loss = (I_pack**2) * veh.r_internal_ohm
-        P_pack = (P_elec_motor)
+        P_pack = (P_elec_motor+P_loss)
         P_batt_vec[idx] = P_pack
         
         E_Wh += (P_pack * dt) / 3600.0
