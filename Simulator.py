@@ -121,15 +121,12 @@ def SimulateSegment(state, seg, veh, motor):
     while s < seg.L and idx < max_steps:
         Fdf, Fdrag = AeroForce(veh, v)
         loads = NormalForce(veh, Fdf, ax, ay)
-        #Fy_max = PacejkaFy_Max(veh, loads.Fz, seg.R, v)
         fz_norm = veh.fz_ref_N **(veh.load_sens_exp) * loads.Fz**(1 - veh.load_sens_exp)
         Fy_max = veh.mu_lat_0 * fz_norm
         Fx_max = veh.mu_long_0 * fz_norm
         Fy_req = veh.m_total_kg * ay * loads.Fz / np.sum(loads.Fz)
         Fy_req_max = (Fy_req/Fy_max)**2
         Fx_cap_tire = Fx_max*np.sqrt(1-Fy_req_max)
-        #Fx_total, P_elec_motor, Limiter, _, omega = MotorForceLimitsSingle(motor, v, veh.r_tire_m, Fx_cap_tire[2:4], veh.power_limit_W)
-        #ax = (Fx_total - Fdrag) / veh.m_total_kg
         if seg.Rnext <= EPS:
             Fx_total, P_elec_motor, Limiter, _, omega = MotorForceLimitsSingle(motor, v, veh.r_tire_m, Fx_cap_tire[2:4], veh.power_limit_W)
             ax = (Fx_total - Fdrag) / veh.m_total_kg
@@ -167,7 +164,7 @@ def SimulateSegment(state, seg, veh, motor):
         Vpack = np.maximum(veh.pack_voltage_v, 12.0)
         I_pack = P_elec_motor / Vpack
         P_loss = (I_pack**2) * veh.r_internal_ohm
-        P_pack = (P_elec_motor + P_loss)
+        P_pack = (P_elec_motor)
         P_batt_vec[idx] = P_pack
         
         E_Wh += (P_pack * dt) / 3600.0
@@ -276,4 +273,4 @@ def Main(veh_path, motor_path, track_path):
     Plotters(track_path, R)
 
 
-Main('Data/KS9E.csv', 'Data/emrax_208_mv.csv', 'Data/enduro_24.csv')
+Main('Data/KS9E.csv', 'Data/emrax_208_mv.csv', 'Data/accel.csv')

@@ -3,7 +3,7 @@ drivetrain_type,chain,drive type
 n_motors,1,motor number
 tmax_nm,150,peak torque
 pmax_w,80000,max continuous power
-n_gear,4.1,final drive
+n_gear,4.4,final drive
 kt_nm_per_a,0.38,motor torque constant
 r_phase_ohm,0.00551,phase resistance
 i0_a,3,no load current at nom voltage

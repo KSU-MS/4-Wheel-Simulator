@@ -65,7 +65,7 @@ def NormalForce(veh, Fdf, ax, ay):
     ])})
 def Fz_normalized(veh, v, ax, ay):
     Fz = NormalForce(veh,ax,ay,DF(veh,v)).Fz_Norm
-    return veh.fz_ref_N**veh.load_sens_exp*Fz**(1-veh.load_sens_exp)
+    return veh.fz_ref_N**(veh.load_sens_exp)*Fz**(1-veh.load_sens_exp)
 def SlipAngle(veh,R,v):
     pass
 def SlipRatio(veh,R,v):
@@ -88,9 +88,9 @@ def PacejkaFx_Max(veh, ax,ay,v):
 
 def Vmax (veh,R,ax,ay):
     def Frontfunc(v):
-        return R*np.sum(PacejkaFy_Max(veh,ax,ay,v)[:2])/(veh.m_total_kg*(1-veh.swd_frac))-v^2
+        return R*np.sum(PacejkaFy_Max(veh,ax,ay,v)[:2])/(veh.m_total_kg*(1-veh.swd_frac))-v**2
     def Rearfunc(v):
-        return R*np.sum(PacejkaFy_Max(veh,ax,ay,v)[2:4])/(veh.m_total_kg*veh.swd_frac)-v^2
+        return R*np.sum(PacejkaFy_Max(veh,ax,ay,v)[2:4])/(veh.m_total_kg*veh.swd_frac)-v**2
     Front_Vmax = root_scalar(Frontfunc, bracket=[0, 1e3], method='brentq',).root
     Rear_Vmax = root_scalar(Rearfunc, bracket=[0, 1e3], method='brentq').root
 
@@ -125,7 +125,7 @@ def brakedistance(veh,v_curr,v_next,ax,ay):
         integrand = veh.m_total_kg*v/BrakeForce(veh,v,ax,ay)
         return integrand
     integral = quad(integrand,v_next,v_curr,args=(veh))[0]
-    Force = BrakeForce(veh,v_curr,v_next,ax,ay)
+    Force = BrakeForce(veh,v_curr,ax,ay)
     return integral, Force
 
 def SimulateSegment(state, seg, veh, motor):

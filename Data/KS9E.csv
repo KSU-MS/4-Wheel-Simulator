@@ -14,7 +14,7 @@ cp_frac,0.55,Aero CoP Rear
 mu_long_0,1.8,Fric Tire Long
 mu_lat_0,1.7,Fric Tire Lat
 fz_ref_N,784.8,Fz Per Tire
-load_sens_exp,0.06,Load Sensitivity
+load_sens_exp,0.08,Load Sensitivity
 pack_voltage_v,588,Pack Voltage
 r_internal_ohm,0.023,Acc Internal Resis
 dt_s,0.001,Time Step

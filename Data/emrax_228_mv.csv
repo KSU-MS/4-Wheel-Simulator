@@ -3,12 +3,12 @@ drivetrain_type,chain,drive type
 n_motors,1,motor number
 tmax_nm,228,max continuous torque
 pmax_w,75000,max continuous power
-n_gear,4.1,final drive
+n_gear,4.9,final drive
 kt_nm_per_a,0.61,motor torque constant
 r_phase_ohm,.00706,phase resistance
 i0_a,7.06,no load current at nom voltage
 ke_v_per_rad,0.1,back emf constant
 tran_eff,0.92,drive efficiency
-rpm_max,6000,max motor speed (rpm)
+rpm_max,6500,max motor speed (rpm)
 i_max_a,150,max motor current
 pack_eff,.9025,inverter + acc effciency

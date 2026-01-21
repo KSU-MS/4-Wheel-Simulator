@@ -8,17 +8,17 @@ swd_frac,0.55,Static Weight (Rear)
 r_tire_m,0.2,Tire Radius
 rho_air_kgpm3,1.15,Air Density
 af_m2,1.2,F Area
-cdf,3.34,DF Coefficient
-cd,1.133,Drag Coefficient
+ClA,3.341,DF Coefficient
+CdA,1.128,Drag Coefficient
 cp_frac,0.57,Aero CoP Rear
 mu_long_0,1.4,Fric Tire Long
 mu_lat_0,1.6,Fric Tire Lat
 fz_ref_N,784.8,Fz Per Tire
-load_sens_exp,-0.06,Load Sensitivity
+load_sens_exp,0.06,Load Sensitivity
 pack_voltage_v,319.2,Pack Voltage
 r_internal_ohm,0.023,Acc Internal Resis
 dt_s,0.001,Time Step
 iter_max,15,Max Iteration - Load Transfer
 iter_tol_ax,0.00001,Long Accel Convergence Tolerance (M/S^2)
 enable_regen,FALSE,Regen
-software_power_limit_W,50000,Power Limit (W)
+power_limit_W,80000,Power Limit (W)
