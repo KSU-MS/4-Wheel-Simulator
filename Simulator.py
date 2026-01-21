@@ -97,12 +97,20 @@ def MotorForceLimitsSingle(motor, v, r_tire, Fx_cap_rear, P_pack_limit):
 
     return T_rear_total/r_tire, P_elec, Limiter, I_phase, omega*30/np.pi
 
-def brakedistance(veh,v_curr,v_next):
-    def integrand(v,veh):
-        BrakeForce = veh.mu_long_0*veh.fz_ref_N**(veh.load_sens_exp)*(veh.m_total_kg*9.81 + 0.5*veh.rho_air_kgpm3*veh.ClA*v**2)**(1-veh.load_sens_exp)+.5*veh.rho_air_kgpm3*veh.CdA*v**2
+def brakedistance(veh,v_curr,v_next,R):
+    def integrand(v,veh,R):
+        if R > EPS:
+            Fx_Max = veh.mu_long_0*veh.fz_ref_N**(veh.load_sens_exp)*(veh.m_total_kg*9.81 + 0.5*veh.rho_air_kgpm3*veh.ClA*v**2)**(1-veh.load_sens_exp)
+            Fy_Max = veh.mu_lat_0*veh.fz_ref_N**(veh.load_sens_exp)*(veh.m_total_kg*9.81 + 0.5*veh.rho_air_kgpm3*veh.ClA*v**2)**(1-veh.load_sens_exp)
+            Fy_Req = (veh.m_total_kg*v**2/R)**(1-veh.load_sens_exp)
+            Fy = (Fy_Req/Fy_Max)
+            Fx = Fx_Max*np.sqrt((1-Fy**2))
+            BrakeForce = Fx +.5*veh.rho_air_kgpm3*veh.CdA*v**2
+        else: BrakeForce = veh.mu_long_0*veh.fz_ref_N**(veh.load_sens_exp)*(veh.m_total_kg*9.81 + 0.5*veh.rho_air_kgpm3*veh.ClA*v**2)**(1-veh.load_sens_exp)+.5*veh.rho_air_kgpm3*veh.CdA*v**2
+        #BrakeForce = veh.mu_long_0*veh.fz_ref_N**(veh.load_sens_exp)*(veh.m_total_kg*9.81 + 0.5*veh.rho_air_kgpm3*veh.ClA*v**2)**(1-veh.load_sens_exp)+.5*veh.rho_air_kgpm3*veh.CdA*v**2
         integrand = veh.m_total_kg*v/BrakeForce
         return integrand
-    integral = quad(integrand,v_next,v_curr,args=(veh))[0]
+    integral = quad(integrand,v_next,v_curr,args=(veh,R))[0]
     Force = veh.mu_long_0*veh.fz_ref_N**(veh.load_sens_exp)*(veh.m_total_kg*9.81 + 0.5*veh.rho_air_kgpm3*veh.ClA*v_curr**2)**(1-veh.load_sens_exp)+.5*veh.rho_air_kgpm3*veh.CdA*v_curr**2
     return integral, Force
 
@@ -133,7 +141,7 @@ def SimulateSegment(state, seg, veh, motor):
         else:
             N_vmax = v_max(veh, seg.Rnext, Fy_max)
             if v > N_vmax:
-                change_s = brakedistance(veh,v,N_vmax)
+                change_s = brakedistance(veh,v,N_vmax,seg.R)
                 if seg.L - s < change_s[0]:
                     ax = -change_s[1]/veh.m_total_kg
                     Limiter = "Braking"
@@ -273,4 +281,4 @@ def Main(veh_path, motor_path, track_path):
     Plotters(track_path, R)
 
 
-Main('Data/KS9E.csv', 'Data/emrax_208_mv.csv', 'Data/accel.csv')
+Main('Data/KS9E.csv', 'Data/emrax_208_mv.csv', 'Data/enduro_24.csv')
