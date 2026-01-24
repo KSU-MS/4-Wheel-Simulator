@@ -8,9 +8,8 @@ from scipy.optimize import root_scalar
 from scipy.integrate import quad
 
 EPS = 1e-9
-'''TO DO:
-- Add Braking
-- Add Pacejka Tire Model
+'''
+-Fix Power draw
 '''
 def CSV_Reader(file_path, key_col=0, value_col=1):
     """Reads a CSV into a SimpleNamespace for dot-notation access."""
@@ -83,7 +82,7 @@ def MotorForceLimitsSingle(motor, v, r_tire, Fx_cap_rear, P_pack_limit):
     
     T_max = {
     'T_wheel_max': motor.tmax_nm * motor.n_gear * motor.tran_eff * motor.pack_eff,
-    'T_pack_max': motor.kt_nm_per_a * motor.i_max_a * motor.n_gear * motor.tran_eff * motor.pack_eff if v < EPS else P_pack_limit*motor.tran_eff*motor.pack_eff / omega_wheel,
+    'T_pack_max': motor.tmax_nm * motor.n_gear * motor.tran_eff * motor.pack_eff if v < EPS else P_pack_limit*motor.tran_eff*motor.pack_eff / omega_wheel,
     'T_grip_max': np.sum(Fx_cap_rear) * r_tire
     }
     Limit_val = np.array(list(T_max.values()))
@@ -91,7 +90,7 @@ def MotorForceLimitsSingle(motor, v, r_tire, Fx_cap_rear, P_pack_limit):
     Limiter = np.array(list(T_max.keys()))[np.argmin(Limit_val)]
     T_used = (T_rear_total) / (motor.n_gear * motor.tran_eff* motor.pack_eff)
     I_phase = T_used / motor.kt_nm_per_a
-    P_mech = T_rear_total * omega_wheel
+    P_mech = T_used * omega
     V_back = motor.ke_v_per_rad * omega
     P_elec = P_mech + (I_phase**2 * motor.r_phase_ohm) + (V_back * motor.i0_a)
 
@@ -165,14 +164,14 @@ def SimulateSegment(state, seg, veh, motor):
             ay = 0.0
         t_vec[idx], s_vec[idx], v_vec[idx] = t, s, v
         ax_vec[idx], ay_vec[idx], Fx_vec[idx] = ax, ay, Fx_total
-        Fy_vec[idx], P_elec_vec[idx], P_mech_vec[idx] = np.sum(Fy_req), P_elec_motor, Fx_total * v
+        Fy_vec[idx], P_elec_vec[idx], P_mech_vec[idx] = np.sum(Fy_req), P_elec_motor, Fx_total * v if Fx_total>EPS else 0
         P_drag_vec[idx] = Fdrag * v
         omega_vec[idx] = omega
         Limiter_vec.append(Limiter)
         Vpack = np.maximum(veh.pack_voltage_v, 12.0)
         I_pack = P_elec_motor / Vpack
         P_loss = (I_pack**2) * veh.r_internal_ohm
-        P_pack = (P_elec_motor+P_loss)
+        P_pack = P_elec_motor+P_loss
         P_batt_vec[idx] = P_pack
         
         E_Wh += (P_pack * dt) / 3600.0
@@ -206,7 +205,7 @@ def SimulateLap(track, veh, motor):
         current_s += seg.L
         t0 += t[-1]
 
-    res.update({"lap_time_s": t0, "energy_used_Wh": E_Wh, "v_max": np.max(res["v"]), "v_mean": np.mean(res["v"])})
+    res.update({"lap_time_s": t0, "energy_used_Wh": E_Wh*np.sqrt(3)/6, "v_max": np.max(res["v"]), "v_mean": np.mean(res["v"])})
     return types.SimpleNamespace(**res)
 
 # --- Visualization ---
@@ -275,10 +274,10 @@ def Main(veh_path, motor_path, track_path):
     print(f"\n--- Simulation Results ({track_path}) ---")
     print(f"Lap Time:   {R.lap_time_s:.2f} s")
     print(f"Lap Time range: {R.lap_time_s*0.90:.2f} s - {R.lap_time_s*1.1:.2f} s")
-    print(f"Energy:     {R.energy_used_Wh/1000:.3f} kWh")
+    print(f"Energy:     {R.energy_used_Wh/1000*22:.3f} kWh")
     print(f"Max Speed:  {R.v_max*3.6*0.621371:.2f} mph")
     print(f"Avg Speed:  {R.v_mean*3.6*0.621371:.2f} mph")
     Plotters(track_path, R)
 
 
-Main('Data/KS9E.csv', 'Data/emrax_208_mv.csv', 'Data/enduro_24.csv')
+Main('Data/RIT2024.csv', 'Data/emrax_228_mv.csv', 'Data/enduro_24.csv')

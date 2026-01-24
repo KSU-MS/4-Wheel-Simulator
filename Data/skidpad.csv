@@ -1,6 +1,8 @@
 ﻿type,radius_m,length_m
+straight,0,.01
 corner,9.125,57.334
 corner,-9.125,57.334
+straight,0,.01
 
 
 
