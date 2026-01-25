@@ -274,7 +274,7 @@ def Main(veh_path, motor_path, track_path):
     print(f"\n--- Simulation Results ({track_path}) ---")
     print(f"Lap Time:   {R.lap_time_s:.2f} s")
     print(f"Lap Time range: {R.lap_time_s*0.90:.2f} s - {R.lap_time_s*1.1:.2f} s")
-    print(f"Energy:     {R.energy_used_Wh/1000*22:.3f} kWh")
+    print(f"Energy:     {R.energy_used_Wh/1000:.3f} kWh")
     print(f"Max Speed:  {R.v_max*3.6*0.621371:.2f} mph")
     print(f"Avg Speed:  {R.v_mean*3.6*0.621371:.2f} mph")
     Plotters(track_path, R)
