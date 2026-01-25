@@ -80,7 +80,6 @@ To modify the simulation setup:
 
 * The Pacejka tire model is actively being introduced and refined
 * Accuracy target: **within 10%** of full simulation results
-* Designed for rapid iteration and tuning rather than real-time use
 
 ---
 
@@ -93,6 +92,7 @@ To modify the simulation setup:
   python Simulator.py
   ```
 * Verify that all required files remain in the same directory structure after unzipping
+
 
 
 
