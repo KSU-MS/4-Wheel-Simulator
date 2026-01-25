@@ -31,7 +31,7 @@ The simulator is designed to achieve **within 10% accuracy** compared to a full 
    * Open the Microsoft Store
    * Search for **Python**
    * Install the latest Python 3 version
-4. **Run** the PipInstaller.zip file
+4. **Run** the PipInstaller.bat file
 5. **Open a terminal in the project folder**
 
    * Right-click on an empty space inside the folder
@@ -92,6 +92,7 @@ To modify the simulation setup:
   python Simulator.py
   ```
 * Verify that all required files remain in the same directory structure after unzipping
+
 
 
 
