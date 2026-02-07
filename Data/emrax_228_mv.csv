@@ -1,9 +1,9 @@
 param,value,
 drivetrain_type,chain,drive type
 n_motors,1,motor number
-tmax_nm,228,max continuous torque
+tmax_nm,220,max continuous torque
 pmax_w,75000,max continuous power
-n_gear,4.9,final drive
+n_gear,4.1,final drive
 kt_nm_per_a,0.61,motor torque constant
 r_phase_ohm,.00706,phase resistance
 i0_a,7.06,no load current at nom voltage

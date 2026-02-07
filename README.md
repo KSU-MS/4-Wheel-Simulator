@@ -78,7 +78,10 @@ To modify the simulation setup:
 
 ## Notes
 
-* The Pacejka tire model is actively being introduced and refined
+* Looking to add a pitch and roll based aero system
+* Add Hub motor system
+* Add Non-EV motor system
+* Understand power usage for more accurate energy consumption data
 * Accuracy target: **within 10%** of full simulation results
 
 ---

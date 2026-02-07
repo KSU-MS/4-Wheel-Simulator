@@ -205,7 +205,7 @@ def SimulateLap(track, veh, motor):
         current_s += seg.L
         t0 += t[-1]
 
-    res.update({"lap_time_s": t0, "energy_used_Wh": E_Wh*np.sqrt(3)/6, "v_max": np.max(res["v"]), "v_mean": np.mean(res["v"])})
+    res.update({"lap_time_s": t0, "energy_used_Wh": E_Wh, "v_max": np.max(res["v"]), "v_mean": np.mean(res["v"])})
     return types.SimpleNamespace(**res)
 
 # --- Visualization ---
@@ -280,4 +280,4 @@ def Main(veh_path, motor_path, track_path):
     Plotters(track_path, R)
 
 
-Main('Data/RIT2024.csv', 'Data/emrax_228_mv.csv', 'Data/enduro_24.csv')
+Main('Data/RIT2024.csv', 'Data/emrax_228_mv.csv', 'Data/accel.csv')
